@@ -1,4 +1,5 @@
 from modelos.avaliacao import Avaliacao
+from modelos.cardapio.item_cardapio import ItemCardapio
 
 class Restaurante:
     restaurantes = []
@@ -8,6 +9,7 @@ class Restaurante:
         self.idade = 0
         self._ativo= False #uso do _ para que essa propriedade não seja acessada, a não ser por @property
         self._avaliacao = []
+        self._cardapio = []
         Restaurante.restaurantes.append(self)
         
     def __str__(self):
@@ -42,5 +44,20 @@ class Restaurante:
         media_notas = round(soma_notas/qtde_notas,1)
         return media_notas
     
+    def adicionar_item_cardapio(self, item): #inicialmente fizemos 2 métodos (bebida e prato) mas depois unificamos p nao gerar repetição
+        if isinstance(item, ItemCardapio):
+            self._cardapio.append(item)
+    
+    @property
+    def exibir_cardapio(self):
+        print(f'Cardápio do restaurante {self.nome}\n')
+        for i, item in enumerate(self._cardapio,start=1): #enumerate numera a lista
+            if hasattr(item, 'descricao'):
+                mensagem_prato = f'{i}. Nome: {item._nome} Preço: R${item._preco} Descrição: {item.descricao}'
+                print(mensagem_prato)
+            if hasattr(item, 'tamanho'):
+                mensagem_bebida = f'{i}. Nome: {item._nome} Preço: R${item._preco} Descrição: {item.tamanho}'
+                print(mensagem_bebida)
+        
 #função dir(restaurante_1) mostra todos os atributos/métodos do objeto
 #função vars(restaurante_1) mostra o conteúdo das variáveis do objeto
